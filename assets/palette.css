@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Reduced palette. Load last.
+   One accent (cyan) for the point being made; greys for everything else.
+   Exceptions kept on purpose: the brand gradient on primary buttons, and
+   WhatsApp green on the WhatsApp button. Yellow dotted underlines mark
+   placeholder content and go away once real content is in.
+   ========================================================================== */
+:root{
+  --sky:#22d3ee;          /* was a second blue */
+  --indigo:#475569;       /* was violet; now a slate grey */
+  --good:#22d3ee; --risk:#94a3b8; --human:#94a3b8;
+}
+
+/* icon tiles: cyan for positive, slate for neutral or negative */
+.tile{background:linear-gradient(145deg,rgba(34,211,238,.38),rgba(14,116,144,.32));border-color:rgba(34,211,238,.4)}
+.tile.good,.tile.human{background:linear-gradient(145deg,rgba(34,211,238,.38),rgba(14,116,144,.32));border-color:rgba(34,211,238,.4)}
+.tile.risk{background:linear-gradient(145deg,#475569,#1e293b);border-color:#64748b}
+
+/* hero: years bar */
+.era-bar.me{background:var(--cyan);box-shadow:none}
+.era-mark{border-left-color:#64748b}
+.era-mark b{color:var(--s3)}
+
+/* noise + proof line charts */
+.trend .decl{stroke:#64748b}
+.trend .decl-t{fill:var(--s3)}
+
+/* approach flow: discarded ideas in grey */
+.flow .drop{stroke:rgba(148,163,184,.3)}
+.flow .tray{fill:rgba(148,163,184,.05);stroke:rgba(148,163,184,.3)}
+.flow .tray-t{fill:var(--s3)}
+.flow .lane.out{stroke:rgba(34,211,238,.45)}
+
+/* scales: "today" verdict in grey */
+.tag-r{color:var(--s2);background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.3)}
+
+/* steps */
+.stp .orb{background:var(--cyan);box-shadow:0 0 0 4px rgba(34,211,238,.12)}
+.stp::after{background:rgba(34,211,238,.5)}
+.stp .q i{background:#334155;color:var(--s2)}
+
+/* comparison table: "alone" in plain grey, not red */
+.cmp .warn{color:var(--ink)}
+.cmp .warn small{color:var(--s4)}
+.meter.hi i.on{background:#cbd5e1}
