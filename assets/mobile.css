@@ -1,0 +1,233 @@
+/* ==========================================================================
+   Fractional CAIO page: sticky menu + phone layout. Load last.
+   Phone goal: each section reads in about one screen. Lists become
+   swipeable rows, small items sit side by side, wide charts get a phone
+   version, and nothing overlaps.
+   ========================================================================== */
+
+/* --- sticky menu (all sizes) ------------------------------------------------ */
+.nav{position:sticky;top:0}
+.nav-in{gap:18px}
+.nav-links{display:flex;gap:4px;margin-inline-start:auto;font-family:var(--sans);font-size:14px;letter-spacing:0;text-transform:none}
+.nav-links a{padding:7px 10px;border-radius:999px;border-bottom:0;color:var(--s3);white-space:nowrap;transition:color .15s,background .15s}
+.nav-links a:hover{color:var(--ink);background:rgba(148,163,184,.08)}
+.nav-links a.on{color:#06121a;background:var(--cyan)}
+.nav .nav-cta{margin-inline-start:6px;flex:none}
+.nav-cta .sm{display:none}
+@media(max-width:1180px){.nav-links a{padding:6px 8px;font-size:13.5px}}
+/* tablets and phones: one swipeable row of chips */
+@media(max-width:1000px){
+  .nav-in{min-height:56px;gap:10px}
+  .nav-links{display:flex;flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;margin:0;padding:4px 2px;
+    -webkit-mask-image:linear-gradient(to left,#000 88%,transparent);mask-image:linear-gradient(to left,#000 88%,transparent)}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{border:1px solid var(--line);font-size:13px;padding:5px 10px}
+  .nav .nav-cta{margin:0}
+  .wordmark span.nm{display:none}
+  .nav-mark{height:32px}
+}
+@media(max-width:640px){.nav-cta .lg{display:none}.nav-cta .sm{display:inline}.nav .btn-sm{padding:8px 12px;min-height:34px}}
+html{scroll-padding-top:68px}
+
+/* desktop keeps the wide flow and full table headings; phones get the vertical flow and short headings */
+.cmp .short{display:none}
+.ig svg.flow-m{display:none}
+
+/* --- phones ----------------------------------------------------------------- */
+@media(max-width:760px){
+  body{font-size:16px}
+  .sec{padding-top:26px}
+  .sh{margin-bottom:16px}
+  .sh h2{font-size:23px;line-height:1.25}
+  .sh .sub{font-size:15px;line-height:1.6}
+  .next{padding-top:26px}
+  .next .ln{height:16px;margin-bottom:6px}
+  .next .lb{font-size:12px}
+  .next .q{font-size:18px}
+  .next .q::after{margin-top:8px;width:28px}
+  .ig{margin-top:16px}
+  .ig-card{padding:14px;border-radius:12px}
+  .ig-t{margin-bottom:10px;gap:4px}
+  .ig-t b{font-size:14.5px}
+  .ig-lab{font-size:11.5px}
+  /* swipeable rows share one look: next card peeks in */
+  .swipe{display:flex!important;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px;margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad)}
+  .swipe::-webkit-scrollbar{display:none}
+
+  /* hero: smaller portrait, no floating badge over the caption */
+  .hero-in{padding-top:16px;gap:6px}
+  .photo{max-width:75px}
+  .badge{display:none}
+  .photo figcaption{padding:0 6px 6px}
+  .photo figcaption b{font-size:15px}
+  .photo figcaption span,.photo .since{display:none}
+  .hero h1{font-size:29px;margin-top:8px}
+  .hero .lead{font-size:15.5px;margin-top:10px;line-height:1.6}
+  .hero .ctas{margin-top:16px}
+  .hero-copy{padding-bottom:18px}
+  .xp{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .xp div,.xp div:nth-child(3){padding:10px 6px 12px;border-inline-start:var(--rule-soft);border-top:0}
+  .xp div:first-child{border-inline-start:0;padding-inline-start:0}
+  .xp b{font-size:20px}
+  .xp span{font-size:11.5px;line-height:1.35}
+  .era{padding-bottom:6px}
+  .era-grid{gap:6px 10px}
+  .era-track{height:24px}
+
+  /* questions: bubbles stay over the photo; one pops above its speaker's head at a time */
+  .meeting{overflow:hidden;border:var(--edge);border-radius:14px;background:#0a101c}
+  .meet-img{aspect-ratio:16/10;border:0;border-radius:0}
+  .meeting::after{height:auto;bottom:0;border-radius:0}
+  .mq-layer{position:absolute!important;inset:0;display:block!important;direction:ltr;margin:0;padding:0;overflow:visible;pointer-events:none}
+  .mq{position:absolute!important;left:clamp(31%,var(--x),69%)!important;top:calc(var(--my) * .6669 * 1cqw)!important;bottom:auto!important;
+    width:62cqw;max-width:62cqw;margin:0!important;padding:8px 11px;font-size:13px;line-height:1.35;border-radius:12px;
+    transform:translate(-50%,calc(-100% - 9px))!important;opacity:0;scale:0;
+    animation:mq-cycle 18s cubic-bezier(.3,1.4,.5,1) infinite!important;animation-delay:calc(var(--i) * 3s)!important}
+  .mq::after{display:block!important;left:var(--mt,50%);bottom:-6px;width:12px;height:12px;margin-left:-6px}
+  .mq::before{display:none!important}
+  .mq.free::after{width:8px;height:8px;bottom:-11px}
+  .mq:nth-child(1){--i:0}.mq:nth-child(2){--i:1}.mq:nth-child(3){--i:2}.mq:nth-child(4){--i:3}.mq:nth-child(5){--i:4}.mq:nth-child(6){--i:5}
+  @keyframes mq-cycle{0%{scale:0;opacity:0}2.5%{scale:1.08;opacity:1}4%{scale:1;opacity:1}14.5%{scale:1;opacity:1}16.5%{scale:.4;opacity:0}100%{scale:0;opacity:0}}
+  .js .meeting.ig:not(.in) .mq{animation-play-state:paused!important}
+  .pq-row{grid-template-columns:118px minmax(0,1fr) 34px;gap:8px;padding:3px 0}
+  .pq-row .q{grid-column:auto;font-size:12.5px}
+  .pq-row .pills{gap:3px}.pq-row .pills i{height:9px}
+  .pq-row .v{font-size:12px}
+  .pq .big{display:flex;align-items:center;gap:12px;padding-top:10px;border-top:var(--rule-soft)}
+  .pq .big b{font-size:36px}
+  .pq .big span{margin:0;font-size:13px}
+  .pq .big .who{display:none}
+
+  /* noise */
+  .split{gap:12px}
+  .orbit{width:min(215px,60vw)}
+  .ochip{font-size:11.5px;padding:3px 8px}
+  .claims{margin-top:12px}
+  .claims div{padding:8px 0;font-size:14px}
+  .nz svg{max-height:190px}
+  .nz .call{font-size:15px}
+  .nz-stats{grid-template-columns:1fr 1fr;gap:8px}
+  .nz-stats div{padding:8px 10px;gap:8px}
+  .nz-stats b{font-size:21px}
+  .nz-stats span{font-size:12px}
+
+  /* approach: vertical filter; the idea list and tests are inside it */
+  .ig svg.flow-d{display:none}
+  .ig svg.flow-m{display:block;max-width:360px;margin:0 auto}
+  .pool-l,.pool,.tests{display:none}
+  .bins{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px;gap:0}
+  .bin,.bin:first-child{padding:10px 8px 4px;border-top:0;border-inline-start:var(--rule-soft)}
+  .bin:first-child{border-inline-start:0;padding-inline-start:0}
+  .bin h4{font-size:14px;line-height:1.3}
+  .bin h4::before{width:20px;margin-bottom:8px}
+  .bin p{font-size:12px;line-height:1.4}
+  .bin ul{margin-top:8px}
+  .bin li{font-size:12.5px;padding:4px 0}
+
+  /* proof */
+  .case{gap:12px;padding-top:6px}
+  .case dd{font-size:14.5px;padding-bottom:8px;margin-bottom:8px}
+  .case dd.big{font-size:17px}
+  .case .res{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 14px;align-items:center;padding-top:12px}
+  .case .res b{font-size:40px;grid-row:span 2}
+  .case .res .what{margin:0;font-size:15px}
+  .case .res .when{font-size:13px}
+  .case .res .meta{display:none}
+  .trend svg{max-height:200px}
+  .stat3{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .stat3 div{padding:8px}
+  .stat3 b{font-size:19px}
+  .stat3 > div > span{font-size:11.5px}
+
+  /* deliverables: scales side by side, rows become swipeable cards */
+  .scales{grid-template-columns:1fr 1fr;gap:8px}
+  .scl{padding:8px 8px 10px}
+  .scl-h{gap:6px;flex-wrap:wrap}
+  .scl-h b{font-size:13.5px}
+  .scl-h .tile.sm{width:22px;height:22px;border-radius:6px}.scl-h .tile.sm svg{width:12px;height:12px}
+  .scl-h span[class^="tag"]{font-size:10.5px;padding:1px 7px;margin-inline-start:0}
+  .scl-f{flex-direction:column;gap:2px;font-size:11px}
+  .tsplit{gap:8px;margin-top:12px}
+  .ledger tbody{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(var(--pad) * -1);padding:2px var(--pad) 6px}
+  .ledger tbody::-webkit-scrollbar{display:none}
+  .ledger tr{flex:0 0 74%;scroll-snap-align:start;border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(11,16,28,.6)}
+  .ledger tbody th{font-size:16px}
+  .ledger td.was,.ledger td.now{font-size:14px;line-height:1.5;margin-top:4px}
+
+  /* how: steps swipe sideways; the timeline fits the screen */
+  .stairs{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:stretch}
+  .stp{margin:0!important;padding:10px;border-radius:12px}
+  .stp::after{display:none}
+  .stp .orb{width:26px;height:26px;font-size:11px;box-shadow:0 0 0 3px rgba(56,189,248,.12),0 0 10px -2px rgba(56,189,248,.7)}
+  .stp h4{margin-top:6px;font-size:14px}
+  .stp .when{font-size:11px}
+  .stp .it{gap:6px;margin-top:5px;font-size:11.5px;line-height:1.3}
+  .stp .it .tile.sm{width:18px;height:18px;border-radius:5px}.stp .it .tile.sm svg{width:11px;height:11px}
+  .stp .q{margin-top:6px;padding-top:6px;gap:6px;font-size:11px;line-height:1.3}
+  .stp .q i{width:16px;height:16px;font-size:10px}
+  .goal{padding:10px;gap:8px;border-radius:12px}
+  .goal .tile{width:36px;height:36px;border-radius:10px}.goal .tile svg{width:18px;height:18px}
+  .goal b{font-size:13px}
+  .gantt-wrap{overflow:visible}
+  .gantt{min-width:0}
+  .g-row{grid-template-columns:repeat(6,minmax(0,1fr));min-height:0;padding:8px 0}
+  .g-row > .g-name{grid-column:1/-1;grid-row:1;padding:0 0 6px}
+  .g-name b{font-size:15px;display:inline}
+  .g-name span{display:inline;font-size:12px;margin-inline-start:8px}
+  .g-axis span:last-child{display:none}
+  .g-axis span{font-size:10.5px}
+  .bar{height:24px;font-size:0;padding:0;margin-right:3px}
+  .bar.go em{font-size:10px}
+  .bar::after{width:9px;height:9px;right:-6px}
+  .g-effort{min-height:0}
+  .g-effort .col i{height:calc(var(--h) * 6px)}
+  .g-effort .col b{font-size:11px}
+
+  /* why: sliders + table; the map repeats them, so it rests on phones */
+  .cmp-ig{grid-template-columns:1fr;gap:10px}
+  .cmp-ig > .ig:last-child{display:none}
+  .cmp-ig .sl{grid-template-columns:112px minmax(0,1fr);gap:10px;padding:12px 0 2px}
+  .cmp-ig .sl-axis{grid-template-columns:112px minmax(0,1fr);gap:10px}
+  .cmp-ig .sl-axis div{grid-column:2}
+  .cmp-ig .sl .nm{font-size:12.5px}
+  .cmp-ig .sl .nm small{display:none}
+  .sl .trk{margin-top:16px}
+  .sl .trk .vl{font-size:11px}
+  .cmp-wrap{overflow:visible}
+  .cmp{min-width:0;table-layout:fixed}
+  .cmp th,.cmp td{padding:9px 3px;font-size:12px}
+  .cmp tbody th{width:40%;font-size:12px;line-height:1.35}
+  .cmp thead th{font-size:12px;line-height:1.25}
+  .cmp .full{display:none}
+  .cmp .short{display:inline}
+  .cmp small{display:none}
+  .meter i{width:6px;height:13px}
+  .meter{gap:2px}
+  .cmp-key{font-size:12px;gap:12px}
+
+  /* faq */
+  .facts{grid-template-columns:1fr 1fr;gap:8px}
+  .facts > div{padding:10px}
+  .facts .tile{width:30px;height:30px;border-radius:9px}.facts .tile svg{width:16px;height:16px}
+  .facts b{margin-top:6px;font-size:16px}
+  .facts span{font-size:12px;line-height:1.4}
+  .acc summary{font-size:15.5px;padding:11px 0}
+  .acc-b{padding-inline-start:30px;font-size:14.5px}
+
+  /* call to action */
+  .cta{padding-top:18px;gap:14px}
+  .cta h2{font-size:24px}
+  .cta .sub{font-size:15px}
+  .agenda{grid-template-columns:104px minmax(0,1fr);gap:12px;margin-top:12px!important}
+  .agenda .ring{max-width:104px}
+  .agenda .ring .c b{font-size:24px}
+  .agenda li{grid-template-columns:10px 40px minmax(0,1fr);gap:6px;padding:5px 0;font-size:12.5px}
+  .after{font-size:12.5px;margin-top:8px}
+  .meet{grid-template-columns:104px minmax(0,1fr);gap:12px;margin-top:12px}
+  .meet figcaption{font-size:13px}
+  .book{padding:14px}
+  .book-steps li{font-size:14px;padding:7px 0}
+  footer{margin-top:36px}
+}
+@media(prefers-reduced-motion:reduce){.nav-links{scroll-behavior:auto}}
+.sl[style*="--v:100%"] .trk .vl{transform:translateX(-100%)}

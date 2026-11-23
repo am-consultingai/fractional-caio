@@ -40,6 +40,38 @@ footer{margin-top:72px;padding:26px var(--pad)}
 .nav .btn{margin-inline-start:auto}
 
 /* hero portrait: smaller, centred in its column */
-.photo{width:100%;max-width:360px;justify-self:center}
+.photo{width:100%;max-width:140px;justify-self:center}
 .badge.b2{top:52%;inset-inline-start:-14%}
-@media(max-width:860px){.photo{max-width:260px}.badge.b2{inset-inline-start:-10%}}
+@media(max-width:860px){.photo{max-width:100px}.badge.b2{inset-inline-start:-10%}}
+/* smaller portrait: caption sits under the photo, no floating badge */
+.photo .badge{display:none}
+.photo figcaption{position:static;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 0 0;text-align:center}
+.photo figcaption > div{display:flex;flex-direction:column;align-items:center}
+.photo figcaption b{font-size:17px}
+.photo .frame::after{height:22%}
+.photo{padding-bottom:16px}
+
+/* contact box: WhatsApp first, phone and email beside it */
+.book .btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
+.book .wa{margin-top:14px;width:100%}
+.alt-contact{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.alt-contact .btn{font-size:13.5px;padding:10px 8px;min-height:42px;white-space:nowrap}
+.alt-contact .btn span{overflow:hidden;text-overflow:ellipsis}
+@media(max-width:400px){.alt-contact{grid-template-columns:1fr}}
+.photo figcaption b{white-space:nowrap}
+
+/* floating WhatsApp button, every screen */
+.wa-float{position:fixed;z-index:90;left:20px;bottom:20px;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+  background:#25d366;box-shadow:0 10px 26px -8px rgba(37,211,102,.65),0 4px 12px -4px rgba(0,0,0,.6);text-decoration:none;transition:transform .2s}
+.wa-float svg{width:32px;height:32px}
+.wa-float .ring{fill:none;stroke:#fff;stroke-width:2.1;stroke-linejoin:round}
+.wa-float .ph{fill:#fff}
+.wa-float::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #25d366;animation:wa-ping 2.6s ease-out infinite}
+@keyframes wa-ping{0%{transform:scale(1);opacity:.8}70%,100%{transform:scale(1.55);opacity:0}}
+.wa-float:hover{transform:scale(1.07)}
+.wa-float:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.wa-tip{position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);white-space:nowrap;padding:6px 10px;border-radius:8px;
+  background:#f8fafc;color:#0b1220;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s}
+.wa-float:hover .wa-tip{opacity:1}
+@media(max-width:760px){.wa-float{left:14px;bottom:14px;width:52px;height:52px}.wa-float svg{width:28px;height:28px}.wa-tip{display:none}}
+@media(prefers-reduced-motion:reduce){.wa-float::before{animation:none}}
