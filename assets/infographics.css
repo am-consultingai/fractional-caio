@@ -1,0 +1,401 @@
+/* ==========================================================================
+   Fractional CAIO page: infographics, v2 (Hebrew, RTL page)
+   Load after visuals.css.
+   Rule: anything with a numeric or time axis runs LEFT TO RIGHT. Its labels,
+   titles and legends stay right-aligned Hebrew. Containers get direction:ltr
+   only around the plotted area, never around running text.
+   Motion: .a-* classes play once when infographics.js adds .in to the .ig;
+   SVG flows (animateMotion) loop continuously.
+   ========================================================================== */
+
+:root{
+  --good:#34d399; --risk:#f87171; --human:#fbbf24;
+  --panel:linear-gradient(180deg,rgba(22,33,54,.55),rgba(11,16,28,.55));
+  --edge:1px solid rgba(56,189,248,.16);
+}
+
+/* --- shared chart frame --------------------------------------------------- */
+.ig{margin-top:44px}
+.ig-card{background:var(--panel);border:var(--edge);border-radius:18px;padding:clamp(18px,3vw,28px)}
+.ig-t{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.ig-t b{font-family:var(--display);font-size:16.5px;font-weight:600}
+.ig-lab{font-size:13px;font-weight:600;color:var(--cyan)}
+.ig-src{margin-top:14px;font-size:12.5px;color:var(--s4)}
+.ig-key{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:13.5px;color:var(--s3)}
+.ig-key i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:7px;vertical-align:-1px;background:var(--c)}
+.ig svg{display:block;width:100%;height:auto;overflow:visible;direction:ltr}
+.ig svg text{font-family:var(--sans);fill:var(--s4);font-size:12px}
+.ig svg .he{direction:rtl;unicode-bidi:embed}
+.ig svg .lbl{fill:var(--s2);font-size:13px;font-weight:500}
+.ig svg .grid{stroke:var(--line-soft);stroke-width:1}
+.ig svg .base{stroke:var(--line);stroke-width:1}
+.ig svg .yr{font-family:var(--mono);font-size:11.5px}
+
+/* glossy icon tile */
+.tile{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;position:relative;overflow:hidden;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--tc,var(--cyan)) 55%,#0b1220),color-mix(in srgb,var(--tc2,var(--indigo)) 45%,#0b1220));
+  border:1px solid color-mix(in srgb,var(--tc,var(--cyan)) 45%,transparent)}
+.tile::before{content:"";position:absolute;inset:0 0 50%;background:linear-gradient(rgba(255,255,255,.18),transparent)}
+.tile svg{position:relative;width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tile.sm{width:30px;height:30px;border-radius:9px}.tile.sm svg{width:16px;height:16px}
+.tile.good{--tc:var(--good);--tc2:#0d9488}.tile.risk{--tc:var(--risk);--tc2:#9f1239}.tile.human{--tc:var(--human);--tc2:#b45309}
+
+/* --- motion primitives ---------------------------------------------------- */
+.a-grow{transform-origin:0 50%;animation:ig-grow 1.2s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--dl,0s)}
+.a-rise{transform-origin:50% 100%;transform-box:fill-box;animation:ig-rise 1s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--dl,0s)}
+.a-draw{stroke-dasharray:1;stroke-dashoffset:1;animation:ig-draw 2.2s ease-out both;animation-delay:var(--dl,0s)}
+.a-pop{transform-box:fill-box;transform-origin:center;animation:ig-pop .6s cubic-bezier(.3,1.5,.5,1) both;animation-delay:var(--dl,0s)}
+.a-fade{animation:ig-fade .8s ease both;animation-delay:var(--dl,0s)}
+.a-drop{animation:ig-drop .7s cubic-bezier(.3,1.4,.5,1) both;animation-delay:var(--dl,0s)}
+@keyframes ig-grow{from{transform:scaleX(0)}}
+@keyframes ig-rise{from{transform:scaleY(0)}}
+@keyframes ig-draw{to{stroke-dashoffset:0}}
+@keyframes ig-pop{from{transform:scale(0);opacity:0}}
+@keyframes ig-fade{from{opacity:0}}
+@keyframes ig-drop{from{transform:translateY(-40px);opacity:0}}
+@keyframes ig-float{to{transform:translateY(-6px)}}
+.js .ig:not(.in) [class*="a-"]{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.ig [class*="a-"],.badge{animation:none!important;stroke-dashoffset:0}}
+
+/* ==========================================================================
+   IG1a hero: floating stat badges on the portrait
+   ========================================================================== */
+.badge{position:absolute;z-index:2;display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;
+  background:rgba(11,16,28,.82);border:var(--edge);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  animation:ig-float 4s ease-in-out infinite alternate;animation-delay:var(--fd,0s)}
+.badge b{font-family:var(--mono);font-size:26px;font-weight:600;line-height:1;direction:ltr;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.badge span{font-size:13.5px;color:var(--s2);line-height:1.3}
+.badge span small{display:block;font-size:12px;color:var(--s4)}
+.badge.b1{top:14%;inset-inline-end:-4%}
+.badge.b2{top:46%;inset-inline-start:-6%}
+@media(max-width:860px){.badge{padding:8px 11px}.badge b{font-size:21px}.badge.b1{inset-inline-end:-2%}.badge.b2{inset-inline-start:-2%}}
+
+/* ==========================================================================
+   IG1b hero: years building AI (LTR time axis)
+   ========================================================================== */
+.era{max-width:var(--maxw);margin:0 auto;padding:10px var(--pad) 34px}
+.era .ig{margin-top:22px}
+.era-grid{display:grid;grid-template-columns:170px minmax(0,1fr);gap:10px 18px;align-items:center}
+.era-grid .who{font-size:15px;font-weight:600}
+.era-grid .who span{display:block;font-size:12.5px;color:var(--s4);font-weight:400}
+.era-track{position:relative;height:30px;direction:ltr}
+.era-bar{position:absolute;top:0;bottom:0;left:var(--s);width:var(--w);border-radius:8px;background:var(--c);
+  display:flex;align-items:center;justify-content:flex-end;padding:0 12px}
+.era-bar.me{background:linear-gradient(90deg,var(--cyan),var(--sky),var(--indigo));box-shadow:0 0 22px -6px rgba(34,211,238,.7)}
+.era-bar em{font-style:normal;white-space:nowrap;font-size:13.5px;font-weight:700;color:var(--t,#06121a);direction:rtl}
+.era-axis{position:relative;height:44px;border-top:var(--rule);direction:ltr}
+.era-axis span{position:absolute;top:6px;left:var(--p);transform:translateX(-50%);font-family:var(--mono);font-size:12px;color:var(--s4)}
+.era-axis span.first{transform:none}.era-axis span.last{transform:translateX(-100%)}
+.era-mark{position:absolute;left:var(--p);bottom:100%;height:92px;border-left:1px dashed var(--human)}
+.era-mark b{position:absolute;top:100%;margin-top:24px;left:0;transform:translateX(-50%);white-space:nowrap;font-size:12.5px;color:var(--human);font-weight:600}
+@media(max-width:640px){.era-grid{grid-template-columns:92px minmax(0,1fr)}.era-grid .who{font-size:13.5px}}
+
+/* ==========================================================================
+   IG2 questions: pill bars (LTR)
+   ========================================================================== */
+.pq{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:clamp(24px,5vw,56px);align-items:center}
+.pq-row{display:grid;grid-template-columns:200px minmax(0,1fr) 48px;align-items:center;gap:16px;padding:8px 0}
+.pq-row .q{font-size:15px;color:var(--s2)}
+.pq-row .pills{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;direction:ltr}
+.pq-row .pills i{height:12px;border-radius:4px;background:rgba(148,163,184,.12)}
+.pq-row .pills i.on{background:var(--pc,var(--sky))}
+.pq-row .pills i.half{background:linear-gradient(90deg,var(--pc,var(--sky)) 50%,rgba(148,163,184,.12) 50%)}
+.pq-row .v{font-family:var(--mono);font-size:14px;direction:ltr;text-align:left}
+.pq .big{border-inline-start:var(--rule);padding-inline-start:28px}
+.pq .big b{display:block;font-family:var(--mono);font-size:clamp(54px,9vw,76px);font-weight:600;line-height:1;direction:ltr;text-align:right;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pq .big span{display:block;margin-top:10px;font-size:15px;color:var(--s2);line-height:1.45}
+.pq .big .who{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px}
+.pq .big .who em{font-style:normal;font-size:12.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--line);color:var(--s3)}
+@media(max-width:820px){.pq{grid-template-columns:1fr}.pq .big{border:0;padding:0}
+  .pq-row{grid-template-columns:minmax(0,1fr) 40px;gap:6px 12px}.pq-row .q{grid-column:1/-1}}
+
+/* ==========================================================================
+   IG3 noise: announcements vs. decisions (LTR)
+   ========================================================================== */
+.nz .spiky{fill:none;stroke:#94a3b8;stroke-width:1.8;stroke-linejoin:round}
+.nz .dec{fill:var(--cyan)}
+.nz .stem{stroke:var(--cyan);stroke-width:1.5;opacity:.7}
+.nz .call{fill:var(--s2);font-size:13px;font-weight:500}
+.nz .call.c{fill:var(--cyan);font-weight:700}
+.nz-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.nz-stats div{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;background:rgba(11,16,28,.6);border:1px solid var(--line-soft)}
+.nz-stats b{font-family:var(--mono);font-size:26px;font-weight:600;direction:ltr}
+.nz-stats div:first-child b{color:#cbd5e1}.nz-stats div:last-child b{color:var(--cyan)}
+.nz-stats span{font-size:13.5px;color:var(--s3);line-height:1.35}
+@media(max-width:560px){.nz-stats{grid-template-columns:1fr}}
+
+/* ==========================================================================
+   IG4 reframe: the decision filter (LTR flow, live particles)
+   ========================================================================== */
+.flow .lane{fill:none;stroke:rgba(148,163,184,.25);stroke-width:1.5;stroke-dasharray:5 6}
+.flow .lane.out{stroke:rgba(34,211,238,.45)}
+.flow .drop{fill:none;stroke:rgba(248,113,113,.3);stroke-width:1.2;stroke-dasharray:3 5}
+.flow .gate{fill:#0f1726;stroke-width:1.5}
+.flow .gate-t{fill:var(--ink);font-size:14px;font-weight:600}
+.flow .gate-s{fill:var(--s4);font-size:11.5px}
+.flow .cnt{font-family:var(--mono);font-size:14px;font-weight:700;fill:#06121a}
+.flow .idea{fill:#64748b}
+.flow .tray{fill:rgba(248,113,113,.06);stroke:rgba(248,113,113,.35);stroke-dasharray:4 5}
+.flow .tray-t{fill:#fca5a5;font-size:13px;font-weight:600}
+.flow .out-t{fill:#06121a;font-size:14px;font-weight:700}
+
+/* ==========================================================================
+   IG5 proof: trend (LTR) + stat tiles
+   ========================================================================== */
+.trend .ln{fill:none;stroke:var(--cyan);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+.trend .ln.pre{stroke:#94a3b8;stroke-width:2.5}
+.trend .pt{fill:var(--bg);stroke:var(--cyan);stroke-width:2.2}
+.trend .pt.pre{stroke:#94a3b8}
+.trend .avg{stroke:var(--s4);stroke-dasharray:4 5}
+.trend .gap{fill:url(#tga)}
+.trend .decl{stroke:var(--human);stroke-dasharray:3 4}
+.trend .decl-t{fill:var(--human);font-size:12.5px;font-weight:700}
+.trend .delta{fill:var(--cyan);font-family:var(--mono);font-size:30px;font-weight:600}
+.stat3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.stat3 div{padding:14px 16px;border-radius:12px;background:rgba(11,16,28,.6);border:1px solid var(--line-soft)}
+.stat3 b{display:block;font-family:var(--mono);font-size:clamp(24px,4.4vw,32px);font-weight:600;direction:ltr;text-align:right;color:var(--cyan)}
+.stat3 b s{font-size:.55em;color:var(--s4);margin-right:10px;font-weight:500}
+.stat3 > div > span{font-size:13.5px;color:var(--s3)}
+.stat3 b span{font-size:inherit}
+@media(max-width:560px){.stat3{grid-template-columns:1fr}}
+
+/* ==========================================================================
+   IG6 deliverables: two scales + time split (LTR)
+   ========================================================================== */
+.scales{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.scl{padding:16px 18px 18px;border-radius:14px;background:rgba(11,16,28,.6);border:1px solid var(--line-soft)}
+.scl.good{border-color:rgba(34,211,238,.35)}
+.scl h4{display:flex;align-items:center;gap:10px;font-size:16px}
+.scl .verdict{display:flex;justify-content:space-between;margin-top:6px;font-size:13.5px;font-weight:600}
+.scl svg .beam{stroke:#cbd5e1;stroke-width:5;stroke-linecap:round}
+.scl svg .post{fill:#334155}
+.scl svg .pivot{fill:var(--bg);stroke:var(--cyan);stroke-width:3}
+.scl svg .pan{fill:#1e293b;stroke:#475569}
+.scl svg .rope{stroke:#475569;stroke-width:1}
+.scl svg .blk-a{fill:#475569}
+.scl svg .blk-d{fill:var(--cyan)}
+.scl svg .pl{fill:var(--s3);font-size:12.5px}
+.tsplit{margin-top:18px;display:grid;gap:12px}
+.tsplit .row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:center}
+.tsplit .nm{font-size:14.5px;font-weight:600}
+.tsplit .bar100{display:flex;gap:3px;height:36px;direction:ltr}
+.tsplit .bar100 i{min-width:0;flex:0 0 calc(var(--v) * 1% - 3px);border-radius:7px;display:grid;place-items:center;font-style:normal;font-size:12.5px;font-weight:600;
+  white-space:nowrap;overflow:hidden;background:var(--c);color:var(--t,#06121a);direction:rtl}
+.tsplit i.g1{--c:#3b4658;--t:var(--s2)}.tsplit i.g2{--c:#2e3848;--t:var(--s2)}.tsplit i.g3{--c:#252d3b;--t:var(--s3)}
+.tsplit i.d{--c:var(--cyan)}.tsplit i.e{--c:var(--sky)}.tsplit i.u{--c:var(--indigo);--t:var(--ink)}
+@media(max-width:700px){.scales{grid-template-columns:1fr}.tsplit .row{grid-template-columns:minmax(0,1fr)}.tsplit .bar100 i{font-size:11px}}
+
+/* ==========================================================================
+   IG7 process: rising steps (reading order, RTL) + effort row in the gantt
+   ========================================================================== */
+.stairs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 150px;align-items:end}
+.stp{position:relative;margin-inline-end:34px;padding:18px;border-radius:16px;background:var(--panel);border:var(--edge);margin-bottom:var(--mb)}
+.stp::after{content:"";position:absolute;top:40px;inset-inline-end:-31px;width:28px;height:2px;
+  background:linear-gradient(to left,var(--indigo),var(--cyan))}
+.stp .orb{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:15px;color:#06121a;
+  background:radial-gradient(circle at 35% 30%,#a5f3fc,var(--sky) 45%,#2563eb);box-shadow:0 0 0 5px rgba(56,189,248,.12),0 0 20px -2px rgba(56,189,248,.7)}
+.stp h4{margin-top:12px;font-size:18px}
+.stp .when{font-size:12.5px;color:var(--s4)}
+.stp .it{display:flex;gap:10px;align-items:center;margin-top:10px;font-size:14px;color:var(--s2);line-height:1.35}
+.stp .q{margin-top:12px;padding-top:10px;border-top:1px solid var(--line-soft);display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--s3)}
+.stp .q i{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:12px;color:#06121a;background:var(--sky)}
+.goal{align-self:stretch;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px;padding:18px;border-radius:18px;
+  background:radial-gradient(80% 60% at 50% 35%,rgba(34,211,238,.16),transparent 70%),var(--panel);border:1px solid rgba(34,211,238,.4);
+  box-shadow:0 0 40px -12px rgba(34,211,238,.45)}
+.goal b{font-family:var(--display);font-size:16px;line-height:1.3}
+.goal .tile{width:56px;height:56px;border-radius:16px}
+.goal .tile svg{width:28px;height:28px}
+@media(max-width:900px){.stairs{grid-template-columns:1fr;gap:16px}.stp{margin:0!important}.stp::after{display:none}}
+.g-effort{align-items:end;min-height:124px;padding-top:12px}
+.g-effort .col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.g-effort .col i{width:46%;max-width:46px;height:calc(var(--h) * 11px);border-radius:6px 6px 0 0;background:linear-gradient(var(--sky),rgba(56,189,248,.3))}
+.g-effort .col.first i{background:linear-gradient(var(--cyan),rgba(34,211,238,.4))}
+.g-effort .col b{font-family:var(--mono);font-size:13px;font-weight:600}
+
+/* ==========================================================================
+   IG8 comparison: time-to-direction sliders + cost/time map (both LTR)
+   ========================================================================== */
+.sl{display:grid;grid-template-columns:190px minmax(0,1fr);gap:16px;align-items:center;padding:12px 0}
+.sl .nm{font-size:14.5px;font-weight:600}
+.sl .nm small{display:block;font-weight:400;font-size:12.5px;color:var(--s4)}
+.sl .trk{position:relative;height:8px;border-radius:9px;background:rgba(148,163,184,.12);direction:ltr;margin-top:18px}
+.sl .trk .f{position:absolute;inset-block:0;left:0;width:var(--v);border-radius:9px;background:var(--c)}
+.sl .trk .th{position:absolute;top:50%;left:var(--v);width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 40%,transparent),0 0 16px var(--c)}
+.sl .trk .vl{position:absolute;bottom:14px;left:var(--v);transform:translateX(-50%);white-space:nowrap;font-size:12.5px;font-weight:700;color:var(--c);direction:rtl}
+.sl-axis{display:grid;grid-template-columns:190px minmax(0,1fr);gap:16px;margin-top:4px}
+.sl-axis div{grid-column:2;display:flex;justify-content:space-between;direction:ltr;font-family:var(--mono);font-size:11.5px;color:var(--s4)}
+.map{position:relative;aspect-ratio:16/8;margin:8px 0 34px 30px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);direction:ltr}
+.map .zone{position:absolute;left:0;top:0;width:42%;height:46%;border-radius:0 0 14px 0;background:linear-gradient(135deg,rgba(34,211,238,.14),rgba(34,211,238,.03));
+  border:1px dashed rgba(34,211,238,.35)}
+.map .zone span{position:absolute;top:10px;left:12px;font-size:13px;color:var(--cyan);font-weight:600;direction:rtl}
+.mp{position:absolute;left:var(--x);top:var(--y);display:flex;align-items:center;gap:10px;transform:translate(calc(var(--s,16px) / -2),-50%)}
+.mp.l{flex-direction:row-reverse;transform:translate(calc(-100% + var(--s,16px) / 2),-50%)}
+.mp i{flex:none;width:var(--s,16px);height:var(--s,16px);border-radius:50%;background:var(--c);box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 18%,transparent)}
+.mp span{direction:rtl;font-size:14px;font-weight:600;color:var(--s2);white-space:nowrap}
+.mp span small{display:block;font-weight:400;font-size:12px;color:var(--s4)}
+.mp.me span{color:var(--cyan);font-size:15px}
+.map .ax-x{position:absolute;top:calc(100% + 8px);left:0;right:0;display:flex;justify-content:space-between;font-size:12.5px;color:var(--s4)}
+.map .ax-y{position:absolute;right:calc(100% + 6px);top:0;bottom:0;display:flex;flex-direction:column;justify-content:space-between;font-size:12.5px;color:var(--s4);
+  writing-mode:vertical-rl;transform:rotate(180deg)}
+@media(max-width:640px){.map{aspect-ratio:4/5}.mp span{font-size:12.5px}.mp.me span{font-size:13.5px}.sl{grid-template-columns:1fr}.sl-axis{grid-template-columns:1fr}.sl-axis div{grid-column:1}}
+
+/* ==========================================================================
+   IG10 FAQ: the engagement at a glance
+   ========================================================================== */
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.facts > div{padding:18px;border-radius:14px;background:var(--panel);border:var(--edge)}
+.facts b{display:block;margin-top:14px;font-family:var(--display);font-size:clamp(21px,3.6vw,26px);font-weight:700;line-height:1.15}
+.facts span{display:block;margin-top:4px;font-size:14px;color:var(--s3);line-height:1.45}
+@media(max-width:820px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ==========================================================================
+   IG11 CTA: the 30 minutes
+   ========================================================================== */
+.agenda{display:grid;grid-template-columns:180px minmax(0,1fr);gap:24px;align-items:center}
+.agenda .ring{position:relative}
+.agenda .ring svg{transform:rotate(-90deg)}
+.agenda .ring circle{fill:none;stroke-width:18}
+.agenda .ring .bg{stroke:var(--line-soft)}
+.agenda .ring .s1{stroke:#94a3b8}.agenda .ring .s2{stroke:var(--cyan)}.agenda .ring .s3{stroke:var(--indigo)}
+.agenda .ring .c{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.agenda .ring .c b{font-family:var(--mono);font-size:34px;font-weight:600;line-height:1}
+.agenda .ring .c span{font-size:13px;color:var(--s4)}
+.agenda ol{list-style:none;margin:0;padding:0}
+.agenda li{display:grid;grid-template-columns:12px 52px minmax(0,1fr);gap:10px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line-soft);font-size:15px;color:var(--s2)}
+.agenda li:last-child{border:0}
+.agenda li i{width:12px;height:12px;border-radius:3px;background:var(--c)}
+.agenda li .num{font-size:12.5px;color:var(--s4);text-align:right}
+.agenda li b{display:block;color:var(--ink);font-weight:600}
+.after{margin-top:14px;display:flex;gap:12px;align-items:center;font-size:14px;color:var(--s3)}
+@media(max-width:520px){.agenda{grid-template-columns:1fr}.agenda .ring{max-width:170px}}
+
+/* ==========================================================================
+   Compact pass: tighter rhythm across sections and charts
+   ========================================================================== */
+.sec{padding-top:40px}
+.next{padding-top:40px}
+.next .ln{height:28px;margin-bottom:12px}
+.next .q{font-size:clamp(19px,4vw,25px)}
+.next .q::after{margin-top:10px}
+.sh{margin-bottom:24px}
+.sh h2{font-size:clamp(25px,4.6vw,36px)}
+.sh .sub{margin-top:10px;font-size:clamp(16px,3.4vw,17.5px)}
+.hero-in{padding-top:clamp(32px,6vh,64px)}
+.hero h1{font-size:clamp(32px,5.6vw,54px)}
+.hero .lead{margin-top:16px}
+.hero .ctas{margin-top:22px}
+.xp div{padding:14px 16px 16px}
+.xp b{font-size:clamp(24px,4.2vw,32px)}
+.era{padding-bottom:20px}
+.ig{margin-top:26px}
+.ig-card{padding:clamp(14px,2.4vw,20px);border-radius:14px}
+.ig-t{margin-bottom:12px}
+.ig-t b{font-size:15.5px}
+.qr{padding:14px 0}
+.qr .t{font-size:clamp(16.5px,3.6vw,19px)}
+.pq-row{padding:5px 0}
+.pq .big b{font-size:clamp(44px,7vw,60px)}
+.nz svg,.trend svg{max-height:260px}
+.nz-stats,.stat3{margin-top:12px}
+.flow svg{max-height:300px}
+.pool{padding:14px 0}
+.tests div{padding:12px 16px}
+.bin{padding:14px 16px 4px}
+.bin li{padding:6px 0}
+.case{padding-top:20px}
+.case dd{padding-bottom:12px;margin-bottom:12px}
+.scl{padding:12px 14px}
+.scl svg{max-height:160px}
+.tsplit .bar100{height:30px}
+.ledger th,.ledger td{padding:12px 0}
+.stp{padding:14px}
+.stp h4{margin-top:8px;font-size:17px}
+.stp .it{margin-top:6px}
+.stp .q{margin-top:8px;padding-top:8px}
+.g-row{min-height:64px}
+.g-effort{min-height:96px}
+.g-effort .col i{height:calc(var(--h) * 9px)}
+.sl{padding:6px 0}
+.map{aspect-ratio:16/6.5;margin-bottom:28px}
+.cmp th,.cmp td{padding:12px 12px}
+.years{margin-top:0}
+.yr{padding-top:18px}
+.quote{margin-top:28px;padding-top:20px}
+.facts > div{padding:14px}
+.facts b{margin-top:10px;font-size:clamp(19px,3.2vw,22px)}
+.acc summary{padding:14px 0}
+.cta{padding-top:28px}
+.cta h2{font-size:clamp(26px,4.8vw,38px)}
+.agenda li{padding:7px 0}
+.agenda .ring{max-width:160px}
+.meet{margin-top:18px}
+.kit > div{padding:18px 0 22px}
+@media(max-width:640px){.map{aspect-ratio:4/5}}
+
+/* ==========================================================================
+   v3: balance scales (noise vs. decisions) and compact cost/speed charts
+   ========================================================================== */
+.scl{position:relative;padding:14px 16px 14px;border-radius:14px;background:linear-gradient(180deg,rgba(22,33,54,.5),rgba(11,16,28,.6));border:1px solid var(--line-soft);overflow:hidden}
+.scl.good{border-color:rgba(34,211,238,.35);background:radial-gradient(70% 60% at 30% 55%,rgba(34,211,238,.10),transparent 70%),linear-gradient(180deg,rgba(22,33,54,.5),rgba(11,16,28,.6))}
+.scl-h{display:flex;align-items:center;gap:10px}
+.scl-h b{font-family:var(--display);font-size:16px}
+.scl-h span[class^="tag"]{margin-inline-start:auto;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px}
+.tag-r{color:#fca5a5;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3)}
+.tag-g{color:var(--cyan);background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.35)}
+.scl svg{max-height:none;margin-top:4px}
+.scl-f{display:flex;justify-content:space-between;gap:10px;margin-top:2px;font-size:13px;color:var(--s3)}
+.scl-f i{display:inline-block;margin-inline-end:7px;vertical-align:0}
+.dot-n{width:16px;height:8px;border-radius:4px;background:#475569}
+.dot-g{width:9px;height:9px;transform:rotate(45deg);background:var(--cyan)}
+.cmp-ig{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;margin-top:26px}
+.cmp-ig .ig{margin-top:0}
+.cmp-ig .sl{grid-template-columns:150px minmax(0,1fr);gap:12px;padding:4px 0}
+.cmp-ig .sl-axis{grid-template-columns:150px minmax(0,1fr);gap:12px}
+.cmp-ig .sl .nm{font-size:13.5px}
+.cmp-ig .sl .nm small{font-size:11.5px}
+.map{aspect-ratio:auto;height:190px;margin:4px 0 26px 22px}
+.map .zone{width:40%;height:52%}
+.map .zone span{font-size:12px;top:6px;left:8px}
+.mp{gap:7px}
+.mp span{font-size:12.5px}.mp.me span{font-size:13.5px}
+.mp span small{font-size:11px}
+.map .ax-x,.map .ax-y{font-size:11.5px}
+@media(max-width:900px){.cmp-ig{grid-template-columns:1fr}}
+@media(max-width:640px){.map{aspect-ratio:auto;height:230px}.cmp-ig .sl{grid-template-columns:1fr}.cmp-ig .sl-axis{grid-template-columns:1fr}}
+
+/* ==========================================================================
+   IG2a questions: an undecided leadership team (stock photo), questions popping
+   up over it as speech bubbles. Positions use cqw so they track the photo:
+   --x left %, --y tip as % of photo height, --l raised connector length.
+   ========================================================================== */
+.meeting{--ar:.6669;position:relative;container-type:inline-size;border-radius:18px;overflow:hidden;border:var(--edge);background:#0a101c}
+.meet-img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;object-position:50% 0;filter:brightness(.66) saturate(.72) contrast(1.06)}
+.meeting::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(11,15,25,.45) 0%,rgba(11,15,25,.08) 46%,rgba(11,15,25,.55) 100%),rgba(18,36,70,.22)}
+.mq-layer{position:absolute;inset:0;z-index:2;direction:ltr;pointer-events:none}
+.mq{position:absolute;left:var(--x);top:calc((var(--y) - var(--l)) * var(--ar) * 1cqw);margin:0;width:max-content;max-width:min(215px,19.5cqw);
+  direction:rtl;text-align:right;padding:10px 14px;border-radius:16px;background:rgba(248,250,252,.97);color:#0b1220;
+  font-family:var(--display);font-size:clamp(12px,1.35cqw,15px);font-weight:600;line-height:1.35;box-shadow:0 12px 28px -12px rgba(0,0,0,.8);
+  transform:translate(-50%,calc(-100% - 10px)) rotate(var(--r));transform-origin:50% 100%;
+  animation:mq-pop .6s cubic-bezier(.3,1.6,.5,1) var(--pd) both, mq-talk var(--td) ease-in-out calc(var(--pd) + 1s) infinite}
+.mq::after{content:"";position:absolute;left:50%;bottom:-7px;width:14px;height:14px;margin-left:-7px;background:inherit;transform:rotate(45deg);border-radius:2px}
+.mq[style*="--l:1"]::before,.mq[style*="--l:2"]::before{content:"";position:absolute;left:50%;top:calc(100% + 7px);height:calc(var(--l) * var(--ar) * 1cqw);border-left:2px dotted rgba(248,250,252,.7)}
+.mq.free{border-radius:20px}
+.mq.free::after{width:10px;height:10px;bottom:-14px;left:58%;border-radius:50%;transform:none}
+@keyframes mq-pop{0%{scale:0;opacity:0}60%{scale:1.1;opacity:1}80%{scale:.97}100%{scale:1;opacity:1}}
+@keyframes mq-talk{0%,86%,100%{scale:1}90%{scale:1.07}94%{scale:.98}}
+.js .meeting.ig:not(.in) .mq{animation-play-state:paused}
+@media(max-width:860px){
+  .meeting{overflow:visible;border:0;background:none}
+  .meeting::after{border-radius:14px;bottom:auto;height:calc(100cqw * .5625)}
+  .meet-img{border-radius:14px;border:var(--edge)}
+  .mq-layer{position:static;display:flex;flex-wrap:wrap;justify-content:center;gap:12px 10px;margin-top:16px;direction:rtl}
+  .mq{position:relative;left:auto;top:auto;max-width:80%;font-size:14.5px;transform:rotate(var(--r))}
+  .mq:nth-child(odd){margin-inline-start:12%}
+  .mq:nth-child(even){margin-inline-end:12%}
+  .mq::after,.mq::before{display:none}
+}
+@media(prefers-reduced-motion:reduce){.mq{animation:none}}

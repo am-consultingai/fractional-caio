@@ -1,0 +1,9 @@
+# Design library, source photos and working files: kept local, not published
+design/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/

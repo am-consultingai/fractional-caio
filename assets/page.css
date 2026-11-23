@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Fractional CAIO landing page: page-level pieces (nav, links, CTA, footer).
+   Load after visuals.css and infographics.css.
+   ========================================================================== */
+
+html{scroll-padding-top:84px}
+.skip{position:absolute;inset-inline-start:12px;top:-60px;z-index:100;padding:10px 14px;border-radius:var(--r);
+  background:var(--cyan);color:#06121a;font-weight:700;text-decoration:none}
+.skip:focus{top:12px}
+
+/* nav: Hebrew links in the body face, not tracked mono caps */
+.nav-links{font-family:var(--sans);font-size:15px;letter-spacing:0;text-transform:none;gap:24px}
+.nav .btn{font-size:14.5px}
+.wordmark .nm{font-family:var(--display)}
+
+/* questions are links to the section that answers them */
+a.qr{text-decoration:none;color:inherit;transition:background .15s}
+a.qr:hover{background:rgba(148,163,184,.04)}
+a.qr:hover .t{color:var(--ink)}
+a.qr:hover .go{color:var(--cyan)}
+a.qr:focus-visible{outline:2px solid var(--sky);outline-offset:2px;border-radius:6px}
+
+/* call-to-action box */
+.book-steps{list-style:none;margin:14px 0 0;padding:0;border-top:var(--rule-soft)}
+.book-steps li{display:flex;gap:12px;align-items:baseline;padding:10px 0;border-bottom:var(--rule-soft);font-size:15.5px;color:var(--s2)}
+.cta .book-steps .num{padding-top:0;font-weight:700;flex:none;width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;font-size:12px;
+  color:#06121a;background:var(--cyan)}
+
+/* footer */
+footer{margin-top:72px;padding:26px var(--pad)}
+.foot-in{max-width:var(--maxw);margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  font-family:var(--sans);letter-spacing:0;text-align:start}
+.foot-in .nav-mark{height:30px}
+
+/* phones: let the time-split labels wrap instead of clipping */
+@media(max-width:700px){
+  .tsplit .bar100{height:auto}
+  .tsplit .bar100 i{min-height:46px;padding:4px 3px;white-space:normal;line-height:1.2;text-align:center;font-size:11px}
+}
+.nav .btn{margin-inline-start:auto}
+
+/* hero portrait: smaller, centred in its column */
+.photo{width:100%;max-width:360px;justify-self:center}
+.badge.b2{top:52%;inset-inline-start:-14%}
+@media(max-width:860px){.photo{max-width:260px}.badge.b2{inset-inline-start:-10%}}
