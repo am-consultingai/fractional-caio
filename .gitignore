@@ -7,3 +7,6 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# Component lab: text-free test versions, kept local
+lab/

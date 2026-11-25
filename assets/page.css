@@ -75,3 +75,25 @@ footer{margin-top:72px;padding:26px var(--pad)}
 .wa-float:hover .wa-tip{opacity:1}
 @media(max-width:760px){.wa-float{left:14px;bottom:14px;width:52px;height:52px}.wa-float svg{width:28px;height:28px}.wa-tip{display:none}}
 @media(prefers-reduced-motion:reduce){.wa-float::before{animation:none}}
+
+/* hero introduction line */
+.hero .intro{font-size:clamp(17px,2vw,21px);color:var(--s2);line-height:1.5;max-width:34rem}
+.hero .intro b{color:var(--ink);font-weight:700}
+.hero .intro .role{color:var(--cyan);font-weight:700;white-space:nowrap}
+.hero .intro + h1{margin-top:14px}
+@media(max-width:760px){.hero .intro{font-size:15.5px}}
+/* what-is-a-CAIO tiles reuse the fact-tile style */
+.caio-roles b{font-size:clamp(18px,2.4vw,21px)}
+/* the CAIO's leading responsibility: full-width featured tile */
+.caio-roles .caio-key{grid-column:1/-1;display:flex;gap:16px;align-items:center;padding:18px 20px;
+  border-color:rgba(34,211,238,.45);background:linear-gradient(90deg,rgba(34,211,238,.10),rgba(34,211,238,.02)),var(--panel)}
+.caio-roles .caio-key b{margin-top:0;font-size:clamp(18px,2.4vw,22px);color:var(--ink)}
+.caio-roles .caio-key span:not(.tile){margin-top:4px;font-size:clamp(14px,1.5vw,16px);color:var(--s2);line-height:1.55;max-width:70ch}
+@media(max-width:760px){.caio-roles .caio-key{padding:12px;gap:10px;align-items:flex-start}.caio-roles .caio-key b{font-size:16px}.caio-roles .caio-key span:not(.tile){font-size:13px}}
+
+/* hero headline: "מה נכון לארגון" in white and smaller, "שלכם?" large, cyan, slanted */
+.hero h1{font-size:clamp(40px,7vw,76px);line-height:1.08}
+.hero h1 .h1a{display:block;font-size:.6em;font-weight:700;color:var(--ink)}
+.hero h1 .h1b{display:inline-block;margin-top:2px;font-style:normal;font-weight:800;color:var(--cyan);transform:skewX(12deg);transform-origin:50% 80%}
+@media(max-width:760px){.hero h1{font-size:46px}}
+.next .q{max-width:34ch;margin-inline:auto}
